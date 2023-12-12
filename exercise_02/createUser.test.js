@@ -1,41 +1,71 @@
 import createUser from "./createUser.js";
 
-// Mock functions for testing
-const onErrorMock = jest.fn();
-const onSuccessMock = jest.fn();
-
-describe("createUser function", () => {
-  test("should call onSuccess callback with the correct email", () => {
-    const originalMathRandom = Math.random;
-    Math.random = jest.fn(() => 0.4);
-
-    const email = "test10@example.com";
-    createUser(email, onErrorMock, onSuccessMock);
-
-    expect(onSuccessMock).toHaveBeenCalledWith(email);
-    expect(onErrorMock).not.toHaveBeenCalled();
-
-    Math.random = originalMathRandom;
+describe("Given createUser function", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("should call onError callback if email is empty", () => {
+  const mockOnError = jest
+    .fn()
+    .mockImplementation(() => "Error: user not created");
+  const mockOnSuccess = jest
+    .fn()
+    .mockImplementation(
+      (email) => `User with email ${email} has been correctly created`
+    );
+
+  test(" When email is empty Then expected error string should be returned", () => {
+    //Arrange
     const email = "";
-    createUser(email, onErrorMock, onSuccessMock);
 
-    expect(onErrorMock).toHaveBeenCalled();
-    expect(onSuccessMock).not.toHaveBeenCalled();
+    //Act
+    const result = createUser(email, mockOnError, mockOnSuccess);
+
+    //Assert
+    expect(result).toBe("Error: user not created");
+    expect(mockOnError).toHaveBeenCalledTimes(1);
   });
 
-  test("should call onError callback if random number is greater than 0.5", () => {
-    const originalMathRandom = Math.random;
-    Math.random = jest.fn(() => 0.6);
+  test(" When email is fulfilled and random number is less than 0.5 Then expected error string should be returned", () => {
+    //Arrange
+    const email = "johndoe@mai.com";
+    const spyOnMathRandom = jest.spyOn(Math, "random");
+    spyOnMathRandom.mockReturnValueOnce(0.4);
 
-    const email = "test10@example.com";
-    createUser(email, onErrorMock, onSuccessMock);
+    //Act
+    const result = createUser(email, mockOnError, mockOnSuccess);
 
-    expect(onErrorMock).toHaveBeenCalled();
-    expect(onSuccessMock).not.toHaveBeenCalled();
+    //Assert
+    expect(result).toBe("Error: user not created");
+    expect(mockOnError).toHaveBeenCalledTimes(1);
+  });
 
-    Math.random = originalMathRandom;
+  test(" When email is fulfilled and random number is equal than 0.5 Then expected success string should be returned", () => {
+    //Arrange
+    const email = "johndoe@mail.com";
+    const spyOnMathRandom = jest.spyOn(Math, "random");
+    spyOnMathRandom.mockReturnValueOnce(0.5);
+
+    //Act
+    const result = createUser(email, mockOnError, mockOnSuccess);
+
+    //Assert
+    expect(result).toBe(`User with email ${email} has been correctly created`);
+    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+  });
+
+  test(" When email is fulfilled and random number is greater than 0.5 Then expected success string should be returned", () => {
+    //Arrange
+    const email = "johndoe@mail.com";
+    const spyOnMathRandom = jest.spyOn(Math, "random");
+    spyOnMathRandom.mockReturnValueOnce(0.6);
+
+    //Act
+    const result = createUser(email, mockOnError, mockOnSuccess);
+
+    //Assert
+    expect(result).toBe(`User with email ${email} has been correctly created`);
+    expect(mockOnError).not.toHaveBeenCalled();
+    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
   });
 });

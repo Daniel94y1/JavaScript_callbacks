@@ -1,30 +1,47 @@
+import onSuccess from "./callbacks/onSuccess.js";
 import transformStringToArray from "./transformStringToCollection.js";
 
-// Mock functions for testing
-const onErrorMock = jest.fn();
-const onSuccessMock = jest.fn();
+describe("Given transformStringToArray function", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-describe("transformStringToArray function", () => {
-  test("should call onError callback if value is an empty string", () => {
+  const mockOnError = jest.fn().mockImplementation(() => "[]");
+  const mockOnSuccess = jest.fn().mockImplementation((email) => onSuccess);
+
+  test(" When value is empty Then expected error string should be returned", () => {
+    //Arrange
     const value = "";
-    transformStringToArray(value, onErrorMock, onSuccessMock);
 
-    expect(onErrorMock).toHaveBeenCalled();
-    expect(onSuccessMock).not.toHaveBeenCalled();
+    //Act
+    const result = transformStringToArray(value, mockOnError, mockOnSuccess);
+
+    //Assert
+    expect(result).toBe("[]");
+    expect(mockOnError).toHaveBeenCalledTimes(1);
   });
 
-  test("should call onSuccess callback with the correct value", () => {
-    const value = "Hello, cats";
-    transformStringToArray(value, onErrorMock, onSuccessMock);
+  test(" When value is a string Then expected success string should be returned", () => {
+    //Arrange
+    const value = "Hello, cats!";
 
-    expect(onSuccessMock).toHaveBeenCalledWith(value);
-    expect(onErrorMock).not.toHaveBeenCalled();
+    //Act
+    const result = transformStringToArray(value, mockOnError, mockOnSuccess);
+
+    //Assert
+    expect(result).toBe(onSuccess);
+    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
   });
-  test("should call onError callback if value is not a string", () => {
-    const value = 70;
-    transformStringToArray(value, onErrorMock, onSuccessMock);
 
-    expect(onErrorMock).toHaveBeenCalled();
-    expect(onSuccessMock).not.toHaveBeenCalled();
+  test(" When value is a number Then expected error string should be returned", () => {
+    //Arrange
+    const value = 60;
+
+    //Act
+    const result = transformStringToArray(value, mockOnError, mockOnSuccess);
+
+    //Assert
+    expect(result).toBe("[]");
+    expect(mockOnError).toHaveBeenCalledTimes(1);
   });
 });
