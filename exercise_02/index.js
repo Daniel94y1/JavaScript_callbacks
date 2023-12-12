@@ -7,5 +7,5 @@ console.log(createUser("", onError, onSuccess));
 
 //test with email as string and log result
 console.log(
-  createUser("daniel.escobar@mataro.epiaedu.cat", onError, onSuccess)
+  createUser("daniel.escobar@mataro.epiaedu.cat", onError, onSuccess),
 );
