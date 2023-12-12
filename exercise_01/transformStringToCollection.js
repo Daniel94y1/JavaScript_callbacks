@@ -12,3 +12,20 @@
  * output
  *  - array
  */
+/**
+ *
+ * @param {any} value
+ * @param {function} onError
+ * @param {funtion} onSuccess
+ * @returns callback
+ */
+
+const transformStringToArray = function (value, onError, onSuccess) {
+  if (typeof value !== "string" || value === "") {
+    return onError();
+  }
+
+  return onSuccess(value);
+};
+
+export default transformStringToArray;

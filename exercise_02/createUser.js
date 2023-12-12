@@ -13,3 +13,14 @@
  * output
  *  - string
  */
+function createUser(email, onError, onSuccess) {
+  const randomNumber = Math.random();
+
+  if (randomNumber > 0.5 || email == "") {
+    return onError();
+  }
+
+  return onSuccess(email);
+}
+
+export default createUser;
