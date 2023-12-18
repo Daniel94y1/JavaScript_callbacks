@@ -5,5 +5,5 @@ import onSuccess from "./callbacks/onSuccess.js";
 console.log(createUser("", onError, onSuccess));
 
 console.log(
-  createUser("daniel.escobar@mataro.epiaedu.cat", onError, onSuccess)
+  createUser("daniel.escobar@mataro.epiaedu.cat", onError, onSuccess),
 );
