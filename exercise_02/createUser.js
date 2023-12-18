@@ -1,3 +1,4 @@
+import validateString from "../helpers/validateString";
 /**
  * Generate a random number between 0 and 1.
  *
@@ -19,7 +20,7 @@ function generateRandomNumber() {
 function createUser(email, onError, onSuccess) {
   const randomNumber = generateRandomNumber();
 
-  if (randomNumber < 0.5 || email === "") {
+  if (randomNumber < 0.5 || !validateString(email)) {
     return onError();
   }
 
